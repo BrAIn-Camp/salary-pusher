@@ -37,6 +37,15 @@ android {
     }
 }
 
+// SceneView 4.25.0 was compiled with Kotlin 2.4.x; AGP 9.2.1 bundles Kotlin 2.2.x.
+// This flag tells the compiler to accept newer metadata without failing.
+// Remove when AGP is upgraded to bundle Kotlin 2.4+.
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+    compilerOptions {
+        freeCompilerArgs.add("-Xskip-metadata-version-check")
+    }
+}
+
 // Room schema export — keeps a record of DB migrations for auditing
 ksp {
     arg("room.schemaLocation", "$projectDir/schemas")
@@ -56,6 +65,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material.icons)
 
     // Navigation
     implementation(libs.androidx.navigation.compose)
@@ -71,10 +81,8 @@ dependencies {
     // DataStore
     implementation(libs.androidx.datastore.preferences)
 
-    // SceneView — 3D rendering and physics — added in Task 5.1
-    // TODO Task 5.1: Resolve Kotlin version compatibility before enabling.
-    // SceneView 4.25.0 requires Kotlin 2.4.x; AGP 9.2.1 bundles Kotlin 2.2.0.
-    // implementation(libs.sceneview)
+    // SceneView — 3D rendering and physics
+    implementation(libs.sceneview)
 
     // Accompanist — permission handling
     implementation(libs.accompanist.permissions)

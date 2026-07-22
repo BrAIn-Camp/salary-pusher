@@ -33,6 +33,11 @@ fun PrimaryButton(
             disabledContentColor   = MaterialTheme.colorScheme.onSurfaceVariant
         )
     ) {
-        Text(text = text, style = MaterialTheme.typography.labelLarge)
+        Text(
+            text = text,
+            style = MaterialTheme.typography.labelLarge.copy(
+                color = MaterialTheme.colorScheme.onPrimary
+            )
+        )
     }
 }
