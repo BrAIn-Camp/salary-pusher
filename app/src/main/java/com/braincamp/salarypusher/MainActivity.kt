@@ -4,9 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import com.braincamp.salarypusher.ui.navigation.SalaryPusherNavGraph
+import com.braincamp.salarypusher.ui.theme.SalaryPusherTheme
 
 /**
  * Main entry point for Salary Pusher.
@@ -19,7 +19,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            MaterialTheme {
+            SalaryPusherTheme {
                 Surface {
                     SalaryPusherNavGraph()
                 }

@@ -1,6 +1,9 @@
 package com.braincamp.salarypusher.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -12,22 +15,26 @@ import com.braincamp.salarypusher.ui.onboarding.OnboardingDenominationScreen
 import com.braincamp.salarypusher.ui.onboarding.OnboardingNotificationsScreen
 import com.braincamp.salarypusher.ui.onboarding.OnboardingSalaryScreen
 import com.braincamp.salarypusher.ui.onboarding.OnboardingScheduleScreen
+import com.braincamp.salarypusher.ui.onboarding.OnboardingViewModel
 import com.braincamp.salarypusher.ui.onboarding.OnboardingWelcomeScreen
 import com.braincamp.salarypusher.ui.settings.SettingsScreen
 
 /**
  * Root navigation graph for Salary Pusher.
  *
- * Start destination is determined by the onboarding completion flag (Task 4.7).
- * For now, always starts at the welcome screen.
- *
- * Full onboarding-skip logic wired in Task 4.7.
+ * Task 4.7: Start destination is determined by onboarding completion flag.
+ * If onboarding is complete, navigate directly to the game screen.
  */
 @Composable
 fun SalaryPusherNavGraph(
     navController: NavHostController = rememberNavController(),
-    startDestination: String = Routes.ONBOARDING_WELCOME
+    onboardingViewModel: OnboardingViewModel = viewModel()
 ) {
+    val isOnboardingComplete by onboardingViewModel.isOnboardingComplete.collectAsStateWithLifecycle()
+
+    val startDestination = if (isOnboardingComplete) Routes.GAME
+                           else Routes.ONBOARDING_WELCOME
+
     NavHost(
         navController = navController,
         startDestination = startDestination
@@ -40,24 +47,37 @@ fun SalaryPusherNavGraph(
         }
         composable(Routes.ONBOARDING_SALARY) {
             OnboardingSalaryScreen(
-                onNext = { navController.navigate(Routes.ONBOARDING_SCHEDULE) }
+                onNext = { hourlyCents ->
+                    onboardingViewModel.hourlySalaryCents = hourlyCents
+                    navController.navigate(Routes.ONBOARDING_SCHEDULE)
+                }
             )
         }
         composable(Routes.ONBOARDING_SCHEDULE) {
             OnboardingScheduleScreen(
-                onNext = { navController.navigate(Routes.ONBOARDING_DENOMINATION) }
+                onNext = { days, startHour, startMin, endHour, endMin ->
+                    onboardingViewModel.workDays = days
+                    onboardingViewModel.shiftStartHour = startHour
+                    onboardingViewModel.shiftStartMinute = startMin
+                    onboardingViewModel.shiftEndHour = endHour
+                    onboardingViewModel.shiftEndMinute = endMin
+                    navController.navigate(Routes.ONBOARDING_DENOMINATION)
+                }
             )
         }
         composable(Routes.ONBOARDING_DENOMINATION) {
             OnboardingDenominationScreen(
-                onNext = { navController.navigate(Routes.ONBOARDING_NOTIFICATIONS) }
+                onNext = { denomination ->
+                    onboardingViewModel.coinDenomination = denomination
+                    navController.navigate(Routes.ONBOARDING_NOTIFICATIONS)
+                }
             )
         }
         composable(Routes.ONBOARDING_NOTIFICATIONS) {
             OnboardingNotificationsScreen(
                 onFinish = {
+                    onboardingViewModel.completeOnboarding()
                     navController.navigate(Routes.GAME) {
-                        // Clear the entire onboarding stack so Back doesn't return to it
                         popUpTo(Routes.ONBOARDING_WELCOME) { inclusive = true }
                     }
                 }
