@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Launcher icon foreground — gold coin emoji stand-in -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Gold coin circle -->
+    <path
+        android:fillColor="#FFD700"
+        android:pathData="M54,20a34,34 0,1,1 0,68a34,34 0,1,1 0,-68z" />
+    <!-- Dollar sign -->
+    <path
+        android:fillColor="#B8860B"
+        android:pathData="M54,34 L54,38 Q44,39 44,47 Q44,55 54,57 Q64,59 64,67 Q64,75 54,76 L54,80 L50,80 L50,76 Q40,75 40,67 L44,67 Q44,73 54,73 Q62,73 62,67 Q62,61 52,59 Q42,57 42,47 Q42,39 50,38 L50,34 Z" />
+</vector>

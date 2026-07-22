@@ -1,0 +1,4 @@
+<resources>
+    <!-- Base theme — Compose handles all visual styling, this just removes the action bar -->
+    <style name="Theme.SalaryPusher" parent="android:Theme.Material.Light.NoActionBar" />
+</resources>
